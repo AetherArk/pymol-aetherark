@@ -29,3 +29,18 @@ target_link_libraries(${TARGET_NAME}
 )
 
 target_compile_definitions(${TARGET_NAME} PUBLIC ${ALL_DEF})
+
+# --- native-core (Phase 1 FFI seam) ------------------------------------------
+# OFF by default: the C++ sscanf fallback in layer0/NativeParse.h is the shipping
+# path until the Rust build is exercised in CI on all platforms. See
+# docs/DEVELOPMENT_PLAN_native_core.md and native-core/README.md.
+option(PYMOL_NATIVE_CORE "Use the Rust native-core crate for hot parsers" OFF)
+if(PYMOL_NATIVE_CORE)
+    find_package(Corrosion REQUIRED)
+    corrosion_import_crate(MANIFEST_PATH ${CMAKE_CURRENT_SOURCE_DIR}/native-core/Cargo.toml)
+    corrosion_add_cxxbridge(native_core_cxx
+        CRATE native_core
+        FILES src/lib.rs)
+    target_link_libraries(${TARGET_NAME} native_core_cxx)
+    target_compile_definitions(${TARGET_NAME} PRIVATE PYMOL_NATIVE_CORE)
+endif()
