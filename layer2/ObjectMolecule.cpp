@@ -21,6 +21,7 @@ Z* -------------------------------------------------------------------
 
 #include"Base.h"
 #include"Parse.h"
+#include"NativeParse.h"
 #include"Vector.h"
 #include"MemoryDebug.h"
 #include"Err.h"
@@ -1043,7 +1044,7 @@ ObjectMolecule *ObjectMoleculeLoadTRJFile(PyMOLGlobals * G, ObjectMolecule * I,
       }
       f0 = f1;
       f1 = f2;
-      if(sscanf(cc, "%f", &f2) == 1) {
+      if(NativeParseFloat(cc, &f2)) {
         if((++c) == 3) {
           c = 0;
           if((cnt + 1) >= start) {
@@ -1085,25 +1086,25 @@ ObjectMolecule *ObjectMoleculeLoadTRJFile(PyMOLGlobals * G, ObjectMolecule * I,
               angles = true;
 
               p = ncopy(cc, p, 8);
-              if(sscanf(cc, "%f", &box[0]) != 1)
+              if(!NativeParseFloat(cc, &box[0]))
                 periodic = false;
               p = ncopy(cc, p, 8);
-              if(sscanf(cc, "%f", &box[1]) != 1)
+              if(!NativeParseFloat(cc, &box[1]))
                 periodic = false;
               p = ncopy(cc, p, 8);
-              if(sscanf(cc, "%f", &box[2]) != 1)
+              if(!NativeParseFloat(cc, &box[2]))
                 periodic = false;
 
               p = ncopy(cc, p, 8);
-              if(sscanf(cc, "%f", &angle[0]) != 1)
+              if(!NativeParseFloat(cc, &angle[0]))
                 angles = false;
 
               p = ncopy(cc, p, 8);
-              if(sscanf(cc, "%f", &angle[1]) != 1)
+              if(!NativeParseFloat(cc, &angle[1]))
                 angles = false;
 
               p = ncopy(cc, p, 8);
-              if(sscanf(cc, "%f", &angle[2]) != 1)
+              if(!NativeParseFloat(cc, &angle[2]))
                 angles = false;
               if(periodic) {
                 cs->Symmetry = std::make_unique<CSymmetry>(G);
@@ -1357,7 +1358,7 @@ ObjectMolecule *ObjectMoleculeLoadRSTFile(PyMOLGlobals * G, ObjectMolecule * I,
       }
       f0 = f1;
       f1 = f2;
-      if(sscanf(cc, "%f", &f2) == 1) {
+      if(NativeParseFloat(cc, &f2)) {
         if((++c) == 3) {
           c = 0;
           fp = cs->coordPtr(a);

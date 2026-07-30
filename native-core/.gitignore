@@ -1,0 +1,8 @@
+# Rust build artifacts
+/target
+
+# cxx glue + binaries generated during standalone verification
+/verify/gen/
+/verify/*.exe
+/verify/*.obj
+/verify/*.pdb
